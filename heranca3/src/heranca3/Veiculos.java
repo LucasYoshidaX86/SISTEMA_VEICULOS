@@ -1,5 +1,9 @@
 package heranca3;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 //Superclasse com atributos em comum.
 public class Veiculos {
    
@@ -69,9 +73,36 @@ public class Veiculos {
     			"Kilometragem: " + this.kilometragem + "\n";
     }
     
-//Simulação do método Insert para enviar e armazenar dados no SQL. (Simulação por conta de não criar banco de dados).
-    public String insert() {
-        return "INSERT INTO veiculos (modelo, anoFabricacao, montadora, cor, kilometragem)" +
-        		 " VALUES ("+ modelo +" , " + anoFabricacao + ", " + montadora + ", " + cor + ", " + kilometragem + ");";
+//Insert para enviar e armazenar dados no SQL. 
+    public void insert() throws SQLException {
+        Connection conexao = ConexaoMySQL.conectar(); //Conecta ao banco de dados.
+
+        if (conexao != null) { //Verifica se existe a conexão para dar prosseguimento ao código.
+            try {
+                //Comando para inserir dados dentro do banco de dados.
+                String sql = "INSERT INTO Veiculos (modelo, anoFabricacao, montadora, cor, kilometragem) " +
+                             "VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement stmt = conexao.prepareStatement(sql); //Cria um objeto com a consulta SQL.
+                //Definindo valores aos parâmetros.
+                stmt.setString(1, getModelo());
+                stmt.setInt(2, getAnoFabricacao());
+                stmt.setString(3, getMontadora());
+                stmt.setString(4, getCor());
+                stmt.setInt(5, getKilometragem());
+                stmt.executeUpdate();
+                //Validação do processo de insert dentro do banco de dados.
+                System.out.println("Veículo inserido com sucesso na tabela Veiculos!");
+                //Tratando exceções caso aconteça algum erro durante a execução do código.
+            } catch (SQLException e) {
+                e.printStackTrace();
+                //Fecha conexão com o banco de dados.
+            } finally {
+                try {
+                    conexao.close(); 
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
