@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class Main {
 
 	public static void main(String[] args) throws SQLException {
-//Instâncias criadas para diferentes tipos de veículos.
+//Instâncias criadas para diferentes tipos de veículos, com a conexão e a inserção de dados no MySQL.
 		
 //Carro com todos os dados + insert para banco de dados.
         AutomovelDomestico v1 = new AutomovelDomestico("Gol", 2013, "Volkswagen", "Branco", 150000, 5, "ABS", "Não");
